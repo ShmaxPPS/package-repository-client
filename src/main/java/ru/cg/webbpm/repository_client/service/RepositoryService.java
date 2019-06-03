@@ -1,11 +1,12 @@
 package ru.cg.webbpm.repository_client.service;
 
-import ru.cg.webbpm.repository_client.model.Entry;
-import ru.cg.webbpm.repository_client.model.Version;
+import ru.cg.webbpm.repository_client.model.Package;
+
+import java.util.List;
 
 public interface RepositoryService {
 
-    Entry simpleEntry();
+    List<Package> packages();
 
-    Version version(int major, int minor, int patch);
+    byte[] upload(String path);
 }

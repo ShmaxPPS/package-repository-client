@@ -2,9 +2,14 @@ package ru.cg.webbpm.repository_client.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.cg.webbpm.repository_client.model.Entry;
-import ru.cg.webbpm.repository_client.model.Version;
+import ru.cg.webbpm.repository_client.model.Package;
 import ru.cg.webbpm.repository_client.service.RepositoryService;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 @RestController
 @RequestMapping("/repository/v1")
@@ -13,17 +18,20 @@ public class RepositoryController {
     @Autowired
     private RepositoryService service;
 
-    @RequestMapping(value = "/entry", method = RequestMethod.GET)
+    @RequestMapping(value = "/packages", method = RequestMethod.GET)
     @ResponseBody
-    public Entry entry() {
-        return service.simpleEntry();
+    public List<Package> packages() {
+        return service.packages();
     }
 
-    @RequestMapping(value = "/version", method = RequestMethod.GET)
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
-    public Version version(@RequestParam(name = "major") int major,
-                           @RequestParam(name = "minor") int minor,
-                           @RequestParam(name = "patch") int patch) {
-        return service.version(major, minor, patch);
+    public void upload(@RequestParam(name = "path") String path) throws IOException {
+        System.out.println("Start loading");
+        Path tempFile = Paths.get("C:/Users/Maxim/Work/upload-test.jar");
+        Files.createFile(tempFile);
+        Files.write(tempFile, service.upload(path));
+        System.out.println("Finish loading");
     }
+
 }
